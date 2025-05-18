@@ -4,6 +4,7 @@
 
 {% block 'content' %}
 {% include "include/Sidebar.html" %}
+
 <div class="p-2 sm:ml-64 mt-16 md:mt-14" >
   <form action="/gender/delete/{{ gender.gender_id }}" method="post">
     {% csrf_token %}

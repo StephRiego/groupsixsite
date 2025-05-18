@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Genders
+from .models import Genders, Users 
+from django.contrib.auth.hashers import make_password
 
 # View to list all genders
 def gender_list(request):
@@ -80,4 +81,58 @@ def delete_gender(request, genderId):
       return render(request, 'gender/DeleteGender.html', data)
     except Exception as e:
         return HttpResponse(f'Error occurred during delete gender: {e}')
+    
+def user_list(request):
+    try:
+        userObj = Users.objects.select_related('gender')
+        data = {
+            'users': userObj
+        }
+
+        return render(request, 'user/UsersList.html', data)
+    except Exception as e:
+        return HttpResponse(f'Error occurred during load users: {e}')
+  
+    
+def add_user(request):
+    try:
+        if request.method == 'POST':
+            fullName = request.POST.get('full_name')
+            gender = request.POST.get('gender')
+            birth_date = request.POST.get('birth_date')
+            address = request.POST.get('address')  
+            contactNumber = request.POST.get('contact_number')
+            email = request.POST.get('email')
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            confirmPassword = request.POST.get('confirm_password')
+            
+            #if password != confirmPassword:
+
+            Users.objects.create(
+                full_name=fullName,
+                gender=Genders.objects.get(pk=gender),
+                birth_date=birth_date,
+                address=address,
+                contact_number=contactNumber,
+                email=email,
+                username=username,
+                password=make_password(password)
+            ).save()
+
+            messages.success(request, 'User added successfully!')
+            return redirect('/user/add')
+
+        else:
+            genderObj = Genders.objects.all()
+
+            data = {
+                'genders': genderObj
+            }
+
+            return render(request, 'user/AddUser.html', data)
+    except Exception as e:
+        return HttpResponse(f'Error occurred during add user: {e}')
+
+
   
