@@ -25,6 +25,8 @@ SECRET_KEY = 'django-insecure-0cha@48)c99cy7=n1+rw8q#0owjl#%-p3e2plwqc0#rmz23&yj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+APPEND_SLASH = False
+
 ALLOWED_HOSTS = []
 
 
@@ -55,7 +57,7 @@ ROOT_URLCONF = 'groupsixsite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,5 +129,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/user/list/'
+LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/login/'

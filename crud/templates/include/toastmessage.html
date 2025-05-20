@@ -3,7 +3,7 @@
 {% if messages %}
     {% for message in messages %}
         {% if message.tags == 'success' %}
-        <div id="toast-success" class="flex ml-64 mt-16 items-center w-full z-60 max-w-xs p-4 mb-4 text-white bg-green-500 rounded-lg shadow-sm" role="alert">
+        <div id="toast-success" class="flex ml-64 mt-16 items-center w-full z-60 max-w-xs p-4 mb-4 text-black bg-white-500 rounded-lg shadow-sm" role="alert">
             <div class="ml-3 text-sm font-normal">{{ message }}</div>
             <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white-500 text-white hover:text-black rounded-lg focus:ring-2 focus:ring-green-200 p-1.5 hover:bg-green-600 inline-flex items-center justify-center h-8 w-8" onclick="document.getElementById('toast-success').style.display='none'">
                 <span class="sr-only">Close</span>
