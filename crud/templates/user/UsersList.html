@@ -6,6 +6,20 @@
   {% include "include/ToastMessage.html" %}
 
   <div class="p-2 sm:ml-64 mt-16 md:mt-14">
+
+    <!-- ✅ Search Bar -->
+    <div class="mb-4">
+      <input
+        type="text"
+        id="searchInput"
+        name="search"
+        placeholder="Search users..."
+        value="{{ search_query }}"
+        class="w-64 px-4 py-2 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </div>
+
+    <!-- ✅ User Table -->
     <div class="relative overflow-x-auto rounded-sm shadow-sm">
       <table class="w-full">
         <thead class="text-xs text-left text-white bg-blue-600">
@@ -52,17 +66,56 @@
       </table>
     </div>
 
-    <!-- Pagination -->
+    <!-- ✅ Pagination -->
     <div class="mt-4 flex justify-center space-x-2 text-sm">
       {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}"
+        <a href="?search={{ search_query }}&page={{ page_obj.previous_page_number }}"
            class="px-2 py-1 border rounded hover:bg-gray-100">Prev</a>
       {% endif %}
+
       <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
       {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}"
+        <a href="?search={{ search_query }}&page={{ page_obj.next_page_number }}"
            class="px-2 py-1 border rounded hover:bg-gray-100">Next</a>
       {% endif %}
     </div>
   </div>
+
+  <!-- ✅ JavaScript for Live Search -->
+  <script>
+    let searchTimeout;
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+        clearTimeout(searchTimeout);
+
+        searchTimeout = setTimeout(() => {
+            const search = encodeURIComponent(this.value);
+
+            fetch(`?search=${search}`, {
+                headers: { 'x-requested-with': 'XMLHttpRequest' }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                const parser = new DOMParser();
+                const newDoc = parser.parseFromString(html, 'text/html');
+                const newTbody = newDoc.querySelector('tbody');
+
+                if (newTbody) {
+                    document.querySelector('tbody').innerHTML = newTbody.innerHTML;
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+        }, 300);
+    });
+  </script>
 {% endblock %}
+
+

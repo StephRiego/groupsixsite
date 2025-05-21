@@ -28,7 +28,7 @@ def add_gender(request):
             return redirect('gender_list')
     return render(request, 'gender/AddGender.html')
 
-# User Views
+
 @login_required
 def user_list(request):
     search_query = request.GET.get('search', '').strip()
@@ -39,23 +39,23 @@ def user_list(request):
             Q(email__icontains=search_query) |
             Q(address__icontains=search_query) |
             Q(contact_number__icontains=search_query) |
-            Q(gender__gender__iexact=search_query)  # Case-sensitive for gender
+            Q(gender__gender__icontains=search_query)
         )
     else:
         users = Users.objects.select_related('gender').all()
 
-    # Pagination
-    paginator = Paginator(users, 10)  # 10 users per page
+    paginator = Paginator(users, 10)
     page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-    try:
-        page_obj = paginator.page(page_number)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
+    return render(request, 'user/UsersList.html', {
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'total_users': users.count()
+    })
 
-    return render(request, 'user/UsersList.html', {'page_obj': page_obj, 'search_query': search_query, 'total_users': users.count()})
+
+
 
 @login_required
 def add_user(request):
@@ -106,6 +106,7 @@ def add_user(request):
     except Exception as e:
         return HttpResponse(f'Error occurred during adding of user: {e}')
 
+
 @login_required
 def edit_user(request, userId):
     try:
@@ -143,7 +144,7 @@ def edit_user(request, userId):
 
     except Exception as e:
         return HttpResponse(f'Error occurred during user edit: {e}')
-
+    
 @login_required
 def edit_gender(request, genderId):
     gender = get_object_or_404(Genders, pk=genderId)
