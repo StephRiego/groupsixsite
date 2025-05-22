@@ -9,14 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
+import re
 
-import re 
-
-# Gender Views
 @login_required
 def gender_list(request):
     genders = Genders.objects.all()
     return render(request, 'gender/GendersList.html', {'genders': genders})
+
 
 @login_required
 def add_gender(request):

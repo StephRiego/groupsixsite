@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <!-- Display messages -->
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h2>Confirm Deletion</h2>
+  <p>Are you sure you want to delete the user: <strong>{{ user.username }}</strong>?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a href="{% url 'user_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}
+

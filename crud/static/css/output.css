@@ -748,6 +748,9 @@
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
   }
+  .py-4 {
+    padding-block: calc(var(--spacing) * 4);
+  }
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
   }
@@ -919,6 +922,13 @@
     --tw-duration: 200ms;
     transition-duration: 200ms;
   }
+  .hover\:bg-amber-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-amber-200);
+      }
+    }
+  }
   .hover\:bg-blue-100 {
     &:hover {
       @media (hover: hover) {
@@ -1088,6 +1098,11 @@
     &:focus {
       --tw-outline-style: none;
       outline-style: none;
+    }
+  }
+  .sm\:mr-4 {
+    @media (width >= 40rem) {
+      margin-right: calc(var(--spacing) * 4);
     }
   }
   .sm\:ml-64 {
